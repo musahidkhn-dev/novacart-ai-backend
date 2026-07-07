@@ -42,7 +42,7 @@ const brandSchema = new mongoose.Schema(
             default: true,
         },
 
-        createBy: {
+        createdBy: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
             required: true,
