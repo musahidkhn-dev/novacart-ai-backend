@@ -4,7 +4,7 @@ const validate = (schema) => {
     return (req, res, next) => {
         try {
             req.validatedData = schema.parse(req.body);
-            console.log("Validate Data: ", req.validatedDate);
+            console.log("Validate Data: ", req.validatedData);
             next();
         } catch (error) {
             return res.status(400).json({

@@ -1,4 +1,7 @@
-import { createBrandService, deleteBrandService, getAllBrandsService, getBrandBySlugService, updateBrandService } from "../services/brandService.js";
+import { createBrandService,
+         deleteBrandService,
+         getAllBrandsService,
+                getBrandBySlugService, updateBrandService } from "../services/brandService.js";
 import ApiResponse from "../utils/apiResponse.js";
 import asyncHandler from "../utils/asyncHandler.js";
 
