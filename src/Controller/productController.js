@@ -1,8 +1,11 @@
+import product from "../models/productModel.js";
 import { createProductService,
          getAllProductsService,
          getProductBySlugService,
          updateProductService,
          deleteProductService,
+         uploadProductImageService,
+         deleteProductImageService,
  } from "../services/productService.js";
  import ApiResponse from "../utils/apiResponse.js";
  import asyncHandler from "../utils/asyncHandler.js";
@@ -22,6 +25,24 @@ import { createProductService,
         )
     );
  });
+
+ export const uploadProductImages =  asyncHandler(async (req, res) => {
+
+   const product = await uploadProductImageService(
+    req.params.id,
+    req.files,
+    req.user._id
+   );
+
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            "Images uploaded successfully",
+            product
+        )
+    );
+ });
+
 
  export const getAllProducts = asyncHandler(async (req, res) => {
     
@@ -80,13 +101,30 @@ import { createProductService,
 
  export const deleteProduct = asyncHandler(async (req, res) => {
 
-    const product = await deleteProductService( req.params.id );
+    const product = await deleteProductService( req.params.id, req.user._id);
 
     return res.status(200).json(
         new ApiResponse(
             200,
             "Product deleted successfully",
             product,
+        )
+    );
+ });
+
+ export const deleteProductImage = asyncHandler(async (req, res) => {
+    
+    const product = await deleteProductImageService(
+        req.params.productId,
+        req.params.imageId,
+        req.user._id
+    );
+
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            "Image deleted successfully.",
+            product
         )
     );
  });

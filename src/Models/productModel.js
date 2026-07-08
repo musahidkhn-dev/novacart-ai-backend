@@ -68,6 +68,30 @@ const productSchema =  new mongoose.Schema(
             trim: true,
         },
 
+        images: [
+            {
+                url: {
+                    type: String,
+                    required: true
+                },
+
+                public_id: {
+                    type: String,
+                    required: true,
+                },
+
+                alt: {
+                    type: String,
+                    default: "",
+                },
+
+                isPrimary: {
+                    type: Boolean,
+                    default: false,
+                },
+            },
+        ],
+
         createdBy: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",

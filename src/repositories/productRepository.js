@@ -32,3 +32,11 @@ export const updateProduct = (id, data) => {
 export const deleteProduct = (id) => {
     return Product.findByIdAndDelete(id);
 }
+
+export const findProductById = (id) => {
+    return Product.findById(id);
+}
+
+export const saveProduct = (product) => {
+    return product.save();
+}
