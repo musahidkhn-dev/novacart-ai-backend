@@ -7,6 +7,7 @@ import storeRoutes from "./routes/storeRoutes.js";
 import categoryRoutes from "./routes/categoryRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 import brandRoutes from "./routes/brandRoutes.js";
+import variantRoutes from "./routes/variantRoutes.js";
 
 
 const app = express();
@@ -20,6 +21,7 @@ app.use("/api/v1/stores", storeRoutes);
 app.use("/api/v1/categories", categoryRoutes);
 app.use("/api/v1/products", productRoutes)
 app.use("/api/v1/brands", brandRoutes);
+app.use("/api/v1/variants", variantRoutes);
 
 
 //Error middleware 

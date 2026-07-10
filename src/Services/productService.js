@@ -1,4 +1,3 @@
-import Product from "../models/productModel.js";
 import ApiError from "../utils/apiError.js";
 import generateUniqueSlug from "../utils/generateUniqueSlug.js";
 import {
@@ -10,7 +9,6 @@ import {
 import { findStoreById } from "../repositories/storeRepository.js";
 import { findBrandById } from "../repositories/brandRepository.js";
 import { findCategoryById } from "../repositories/categoryRepository.js";
-import product from "../models/productModel.js";
 import cloudinary from "../config/cloudinary.js";
 
 
@@ -212,3 +210,4 @@ export const deleteProductImageService = async ( productId, imageId, userId ) =>
     
     return product;
 };
+

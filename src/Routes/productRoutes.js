@@ -11,6 +11,7 @@ import upload from "../middleware/uploadMiddleware.js";
 
 const router = Router();
 
+// Remove "superAdmin" after Seller Registration module is completed.
 router.post("/", verifyJWT, authorizeRoles("seller", "superAdmin"), validate(createProductSchema), createProduct);
 router.get("/", getAllProducts);
 router.get("/:slug", getProductBySlug);
