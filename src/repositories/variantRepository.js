@@ -5,7 +5,10 @@ export const createVariant = (data) => {
 }
 
 export const findVariantById = (id) => {
-    return Variant.findById(id);
+    return Variant.findById(id)
+        .populate(
+            "product", "name slug"
+        );
 }
 
 export const updateVariant = (id, data) => {
