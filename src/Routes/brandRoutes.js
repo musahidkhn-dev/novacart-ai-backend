@@ -2,7 +2,7 @@ import { Router } from "express";
 import verifyJWT from "../middleware/authMiddleware.js";
 import authorizeRoles from "../middleware/authorizationRoles.js";
 import validate from "../middleware/validate.js";
-import { createBrand, deleteBrand, getAllBrands, getBrandBySlug, updateBrand } from "../controller/brandController.js";
+import { createBrand, deleteBrand, getAllBrands, getBrandBySlug, updateBrand } from "../controllers/brandController.js";
 import { createBrandSchema } from "../validators/brandValidation.js";
 import { getAllBrandsService } from "../services/brandService.js";
 

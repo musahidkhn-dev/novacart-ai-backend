@@ -3,7 +3,7 @@ import verifyJWT from "../middleware/authMiddleware.js";
 import authorizeRoles from "../middleware/authorizationRoles.js";
 import validate from "../middleware/validate.js";
 import { addToCartSchema, updateChartItemSchema } from "../validators/cartValidation.js";
-import { addToCart, clearCart, getCart, removeCartItem, updateCartItem } from "../controller/cartController.js";
+import { addToCart, clearCart, getCart, removeCartItem, updateCartItem } from "../controllers/cartController.js";
 
 const router = Router();
 

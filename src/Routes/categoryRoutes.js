@@ -1,7 +1,7 @@
 import { Router } from "express";
 import verifyJWT from "../middleware/authMiddleware.js";
 import authorizeRoles from "../middleware/authorizationRoles.js";
-import { createCategory, getAllCategories } from "../controller/categoryController.js";
+import { createCategory, getAllCategories } from "../controllers/categoryController.js";
 
 const router = Router();
 

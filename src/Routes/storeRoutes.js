@@ -1,7 +1,7 @@
 import { Router } from "express";
 import verifyJWT from "../middleware/authMiddleware.js";
 import authorizeRoles from "../middleware/authorizationRoles.js";
-import { createStore, getMyStore } from "../controller/storeController.js";
+import { createStore, getMyStore } from "../controllers/storeController.js";
 
 const router = Router();
 // TODO:

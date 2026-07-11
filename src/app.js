@@ -9,6 +9,7 @@ import productRoutes from "./routes/productRoutes.js";
 import brandRoutes from "./routes/brandRoutes.js";
 import variantRoutes from "./routes/variantRoutes.js";
 import cartRoutes from "./routes/cartRoutes.js";
+import addressRoutes from "./routes/addressRoutes.js";
 
 const app = express();
 app.use(express.json());
@@ -23,6 +24,8 @@ app.use("/api/v1/products", productRoutes)
 app.use("/api/v1/brands", brandRoutes);
 app.use("/api/v1/variants", variantRoutes);
 app.use("/api/v1/cart", cartRoutes);
+app.use("/api/v1/addresses", addressRoutes);
+
 
 
 //Error middleware 

@@ -3,7 +3,7 @@ import verifyJWT from "../middleware/authMiddleware.js";
 import authorizeRoles from "../middleware/authorizationRoles.js";
 import validate from "../middleware/validate.js";
 import { createVariantSchema, updateVariantSchema } from "../validators/variantValidation.js";
-import { createVariant, deleteVariant, deleteVariantImage, getVariantByProduct, setPrimaryVariantImage, updateVariant, uploadVariantImages } from "../controller/variantController.js";
+import { createVariant, deleteVariant, deleteVariantImage, getVariantByProduct, setPrimaryVariantImage, updateVariant, uploadVariantImages } from "../controllers/variantController.js";
 import upload from "../middleware/uploadMiddleware.js";
 
 

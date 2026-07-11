@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getCurrentUser, login, logout, register, refreshAccessToken } from "../controller/authController.js";
+import { getCurrentUser, login, logout, register, refreshAccessToken } from "../controllers/authController.js";
 import verifyJWT from "../middleware/authMiddleware.js";
 import authorizeRoles from "../middleware/authorizationRoles.js";
 

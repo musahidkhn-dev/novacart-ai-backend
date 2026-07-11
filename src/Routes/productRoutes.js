@@ -2,7 +2,7 @@ import { Router } from "express";
 import { createProduct, getAllProducts,  getProductBySlug, updateProduct, deleteProduct,
        uploadProductImages, 
        deleteProductImage,
-       } from "../Controller/productController.js";
+       } from "../controllers/productController.js";
 import verifyJWT from "../middleware/authMiddleware.js";
 import authorizeRoles from "../middleware/authorizationRoles.js";
 import validate from "../middleware/validate.js";
