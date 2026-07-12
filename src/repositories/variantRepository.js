@@ -29,8 +29,8 @@ export const deleteVariant = (id) => {
     return Variant.findByIdAndDelete(id);
 }
 
-export const saveVariant = (variant) => {
-    return variant.save();
+export const saveVariant = (variant,session=null) => {
+    return variant.save({session});
 }
 
 export const findVariantByVariantKey = (productId, variantKey) => {

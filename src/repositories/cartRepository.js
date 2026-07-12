@@ -18,8 +18,8 @@ export const createCart = (data) => {
     return Cart.create(data);
 }
 
-export const saveCart = (cart) => {
-    return cart.save();
+export const saveCart = (cart,session=null) => {
+    return cart.save({session});
 }
 
 export const deleteCart = (id) => {
