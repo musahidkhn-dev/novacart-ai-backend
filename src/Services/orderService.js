@@ -51,9 +51,7 @@ export const createOrderService = async(userId, data) => {
             }
 
             const primaryImage = variant.images.find(img => img.isPrimary);
-            console.log("Cart Item:", item)
-            console.log("Item Quantity:", item.quantity)
-            console.log("Variant: ", variant)
+         
             orderItems.push({
                 product: variant.product._id,
                 variant: variant._id,
@@ -63,7 +61,7 @@ export const createOrderService = async(userId, data) => {
                 price: variant.price,
                 quantity: item.quantity,
             });
-            console.log("Order Items:", orderItems)
+           
            
 
             subtotal += variant.price * item.quantity;

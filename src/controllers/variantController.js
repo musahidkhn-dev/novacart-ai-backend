@@ -43,7 +43,7 @@ export const deleteVariant = asyncHandler(async (req, res) => {
 export const uploadVariantImages = asyncHandler(async (req, res) => {
     const variant = await uploadVariantImagesService(req.params.id,req.files);
 
-    // console.log("Returned Variant:", variant)
+   
     return res.status(200).json(
         new ApiResponse(200, "Images uploaded successfully.", variant)
     );

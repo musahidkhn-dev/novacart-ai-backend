@@ -35,7 +35,7 @@ export const deleteProduct = (id) => {
 
 export const findProductById = (id) => {
     let product = Product.findById(id);
-    console.log(product)
+    
     return product
 }
 export const saveProduct = (product) => {
