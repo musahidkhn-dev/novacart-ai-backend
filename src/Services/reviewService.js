@@ -1,3 +1,4 @@
+import { ORDER_STATUS } from "../constants/orderStatus.js";
 import { findOrderById } from "../repositories/orderRepository.js";
 import { findProductById, saveProduct } from "../repositories/productRepository.js";
 import { createReview, deleteReview, findReviewById, findReviewByUserAndProduct, findReviewsByProduct, saveReview } from "../repositories/reviewRepository.js";
@@ -22,7 +23,7 @@ export const createReviewService = async(userId, data) => {
         throw new ApiError(403, "Unauthorized.");
     }
 
-    if(order.orderStatus !== "delivered") {
+    if(order.orderStatus !== ORDER_STATUS.DELIVERED) {
         throw new ApiError(400, "Only delivered orders can reviewed.");
     }
     

@@ -5,13 +5,14 @@ import validate from "../middleware/validate.js";
 import { createBrand, deleteBrand, getAllBrands, getBrandBySlug, updateBrand } from "../controllers/brandController.js";
 import { createBrandSchema } from "../validators/brandValidation.js";
 import { getAllBrandsService } from "../services/brandService.js";
+import { ROLES } from "../constants/roles.js";
 
 const router = Router();
 
-router.post("/", verifyJWT, authorizeRoles("admin", "superAdmin"), validate(createBrandSchema), createBrand);
+router.post("/", verifyJWT, authorizeRoles(ROLES.ADMIN, ROLES.SUPER_ADMIN), validate(createBrandSchema), createBrand);
 router.get("/", getAllBrands);
 router.get("/:slug", getBrandBySlug);
-router.patch("/:id", verifyJWT, authorizeRoles("superAdmin"), updateBrand);
-router.delete("/:id", verifyJWT, authorizeRoles("superAdmin"), deleteBrand)
+router.patch("/:id", verifyJWT, authorizeRoles(ROLES.SUPER_ADMIN), updateBrand);
+router.delete("/:id", verifyJWT, authorizeRoles(ROLES.SUPER_ADMIN), deleteBrand)
 
 export default router;

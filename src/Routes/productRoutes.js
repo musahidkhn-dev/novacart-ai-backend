@@ -8,17 +8,18 @@ import authorizeRoles from "../middleware/authorizationRoles.js";
 import validate from "../middleware/validate.js";
 import { createProductSchema, updateProductSchema } from "../validators/productValidation.js";
 import upload from "../middleware/uploadMiddleware.js";
+import { ROLES } from "../constants/roles.js";
 
 const router = Router();
 
-// Remove "superAdmin" after Seller Registration module is completed.
-router.post("/", verifyJWT, authorizeRoles("seller", "superAdmin"), validate(createProductSchema), createProduct);
+
+router.post("/", verifyJWT, authorizeRoles(ROLES.SELLER, ), validate(createProductSchema), createProduct);
 router.get("/", getAllProducts);
 router.get("/:slug", getProductBySlug);
-router.patch("/:id", verifyJWT, authorizeRoles("seller", "superAdmin"),validate(updateProductSchema), updateProduct);
-router.delete("/:id", verifyJWT, authorizeRoles("seller", "superAdmin"), deleteProduct);
-router.post("/:id/images", verifyJWT, authorizeRoles("seller", "superAdmin"), upload.array("images", 10), uploadProductImages);
-router.delete("/:productId/images/:imageId", verifyJWT, authorizeRoles("seller", "superAdmin"), deleteProductImage)
+router.patch("/:id", verifyJWT, authorizeRoles(ROLES.SELLER,),validate(updateProductSchema), updateProduct);
+router.delete("/:id", verifyJWT, authorizeRoles(ROLES.SELLER, ), deleteProduct);
+router.post("/:id/images", verifyJWT, authorizeRoles(ROLES.SELLER, ), upload.array("images", 10), uploadProductImages);
+router.delete("/:productId/images/:imageId", verifyJWT, authorizeRoles(ROLES.SELLER), deleteProductImage)
 
 
 export default router;

@@ -1,4 +1,7 @@
 import mongoose from "mongoose";
+import { PAYMENT_STATUS } from "../constants/paymentStatus.js";
+import { PAYMENT_METHOD } from "../constants/paymentMethod.js";
+import { ORDER_STATUS } from "../constants/orderStatus.js";
 
 const orderItemSchema = new mongoose.Schema(
     {
@@ -98,6 +101,16 @@ const orderSchema = new mongoose.Schema(
             type: Number,
             default: 0,
         },
+        coupon: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Coupon",
+            default: null,
+        },
+
+        discount: {
+            type: Number,
+            default: 0,
+        },
 
 
         discount: {
@@ -112,20 +125,20 @@ const orderSchema = new mongoose.Schema(
 
         paymentMethod: {
             type: String,
-            enum: ["COD", "ONLINE"],
+            enum: Object.values(PAYMENT_METHOD),
             required: true,
         },
 
         paymentStatus: {
             type: String,
-            enum: ["pending", "paid", "failed", "refunded", "partially_refunded"],
-            default: "pending",
+            enum: Object.values(PAYMENT_STATUS),
+            default: PAYMENT_STATUS.PENDING,
         },
 
         orderStatus: {
             type: String,
-            enum: ["pending", "confirmed", "processing", "shipped", "out_for_delivery", "delivered", "cancelled", "returned"],
-            default: "pending",
+            enum: Object.values(ORDER_STATUS),
+            default: ORDER_STATUS.PENDING,
         },
         orderNumber: {
             type: String,

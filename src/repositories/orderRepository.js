@@ -17,7 +17,7 @@ export const findAllOrders = () => {
 }
 
 
-export  const saveOrder = (order) => {
-    return order.save();
+export  const saveOrder = (order, session = null) => {
+    return order.save().populate("order").session(session);
 }
 

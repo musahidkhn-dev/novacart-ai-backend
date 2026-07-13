@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { ROLES } from "../constants/roles.js";
 
 const userSchema = new mongoose.Schema(
     {
@@ -27,13 +28,9 @@ const userSchema = new mongoose.Schema(
         role: {
             type: String,
             enum: [
-                "customer",
-                "seller",
-                "deliveryPartner",
-                "admin",
-                "superAdmin",
+                ROLES
             ],
-            default: "customer"
+            default: ROLES.CUSTOMER
         },
 
         isEmailVerified: {

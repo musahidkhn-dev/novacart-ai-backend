@@ -4,6 +4,7 @@ import { findCartByUser, saveCart } from "../repositories/cartRepository.js";
 import { createOrder, findAllOrders, findOrderById, findOrderByUser, saveOrder } from "../repositories/orderRepository.js";
 import { findVariantById, saveVariant } from "../repositories/variantRepository.js";
 import ApiError from "../utils/apiError.js";
+import { ORDER_STATUS } from "../constants/orderStatus.js";
 
 
 export const createOrderService = async(userId, data) => {
@@ -98,10 +99,12 @@ export const createOrderService = async(userId, data) => {
                 postalCode: address.postalCode,
             },
             subtotal,
+            discount: cart.discount,
+            grandTotal: subtotal - cart.discount,
+            coupon: cart.appliedCoupon,
             shippingCharge,
             tax,
             discount,
-            grandTotal,
             paymentMethod: data.paymentMethod,
         }], session);
 
@@ -168,7 +171,7 @@ export const cancelOrderService = async(userId,orderId) => {
             throw new ApiError(403, "Unauthorized.");
         }
 
-        if(!["pending","confirmed"].includes(order.orderStatus)) {
+        if(![ORDER_STATUS.PENDING,ORDER_STATUS.CONFIRMED].includes(order.orderStatus)) {
             throw new ApiError(400, "This order cannot be cancelled.");
         }
 
@@ -185,7 +188,7 @@ export const cancelOrderService = async(userId,orderId) => {
             }
         }
 
-        order.orderStatus = "cancelled";
+        order.orderStatus = ORDER_STATUS.CANCELLED;
 
         await saveOrder(order,session);
 
@@ -213,7 +216,7 @@ export const updateOrderService = async(orderId, data) => {
         throw new ApiError(404, "Order not found.");
     }
 
-    if(order.orderStatus === "cancelled") {
+    if(order.orderStatus === ORDER_STATUS.CANCELLED) {
         throw new ApiError(400, "Cancelled order cannot be updated.");
     }
 
