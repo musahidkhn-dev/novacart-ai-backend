@@ -1,4 +1,4 @@
-import { applyCouponService, createCouponService, deleteCouponService, getAllCouponsService, getCouponByIdService, updateCouponService } from "../services/couponService.js";
+import { applyCouponService, createCouponService, deleteCouponService, getAllCouponsService, getCouponByIdService, removeCouponService, updateCouponService } from "../services/couponService.js";
 import ApiResponse from "../utils/apiResponse.js";
 import asyncHandler from "../utils/asyncHandler.js";
 
@@ -59,5 +59,14 @@ export const deleteCoupon = asyncHandler(async(req,res) => {
 
     return res.status(200).json(
         new ApiResponse(200, "Coupon deleted successfully.", null)
+    );
+})
+
+export const removeCoupon = asyncHandler(async(req,res) => {
+
+    const cart = await removeCouponService(req.user._id);
+
+    return res.status(200).json(
+        new ApiResponse(200, "Coupon removed successfully.")
     );
 })

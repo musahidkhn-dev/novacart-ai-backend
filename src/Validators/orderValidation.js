@@ -6,7 +6,7 @@ export const createOrderSchema = z.object({
 
     addressId: z.string().trim(),
 
-    paymentMethod: z.enum([PAYMENT_METHOD]),
+    paymentMethod: z.enum(Object.values(PAYMENT_METHOD)),
 });
 
 export const updateOrderSchema = z.object({

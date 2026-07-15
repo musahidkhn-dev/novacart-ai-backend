@@ -2,6 +2,7 @@ import ApiError from "../utils/apiError.js";
 import { findCartByUser, createCart, saveCart } from "../repositories/cartRepository.js";
 import { findVariantById } from "../repositories/variantRepository.js";
 import { findBrandById } from "../repositories/brandRepository.js";
+import { recalculateCouponService } from "./couponService.js";
 
 export const addToCartService = async (userId, data) => {
     const variant = await findVariantById(data.variant);
@@ -43,7 +44,9 @@ export const addToCartService = async (userId, data) => {
             priceAtAddTime: variant.price,
         });
     }
-    return await saveCart(cart)
+    await saveCart(cart)
+    await recalculateCouponService(cart);
+    return cart;
 } ;
 
 export const getCartService = async (userId) => {
@@ -94,7 +97,9 @@ export const updateCartItemService = async (userId,itemId,quantity) => {
     }
 
     item.quantity = quantity;
-    return await saveCart(cart);    
+    await saveCart(cart);   
+    const updateCart = await recalculateCouponService(cart);
+    return updateCart;
 }
 
 export const removeCartItemService = async (userId, itemId) => {
@@ -110,7 +115,7 @@ export const removeCartItemService = async (userId, itemId) => {
         throw new ApiError(404, "Item not found.");
     }
 
-    cart.item.pull(itemId);
+    cart.items.pull(itemId);
 
     return await saveCart(cart);
 }
@@ -125,5 +130,8 @@ export const clearCartService = async(userId) => {
 
     cart.items = [];
 
-    return await saveCart(cart);
+    await saveCart(cart);
+    await recalculateCouponService(cart);
+    return cart;
+
 }

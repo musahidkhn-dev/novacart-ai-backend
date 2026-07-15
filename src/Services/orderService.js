@@ -69,6 +69,7 @@ export const createOrderService = async(userId, data) => {
 
         }
 
+    
         // TOTALS
 
         const shippingCharge = 0;
@@ -100,14 +101,15 @@ export const createOrderService = async(userId, data) => {
             },
             subtotal,
             discount: cart.discount,
-            grandTotal: subtotal - cart.discount,
             coupon: cart.appliedCoupon,
+            grandTotal: subtotal - cart.discount,
             shippingCharge,
             tax,
             discount,
             paymentMethod: data.paymentMethod,
         }], session);
 
+       
         // DEDUCT STOCK
 
         for(const item of cart.items) {
@@ -161,7 +163,7 @@ export const cancelOrderService = async(userId,orderId) => {
 
     try {
 
-        const order = await findOrderById(orderId);
+        const order = await findOrderById(orderId, session);
         
         if(!order) {
             throw new ApiError(404, "Order not found.");
@@ -177,13 +179,14 @@ export const cancelOrderService = async(userId,orderId) => {
 
         for(const item of order.orderItems) {
 
-            const variant = await findVariantById(item.variant);
+            const variant = await findVariantById(item.variant, session);
 
             if(variant) {
                 variant.stock += item.quantity;
                 
                 await saveVariant(
                     variant,
+                    session,
                 );
             }
         }

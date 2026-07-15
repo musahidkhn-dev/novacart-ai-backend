@@ -19,16 +19,9 @@ import mongoose from "mongoose";
             type: Number,
             required: true,
         },
-        appliedCoupon: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Coupon",
-            default: null,
-        },
+       
 
-        discount: {
-            type: Number,
-            default: 0,
-        },
+    
     },
     {
         _id: true
@@ -43,8 +36,19 @@ const cartSchema = new mongoose.Schema(
             required: true,
             unique: true,
         },
-
+       
         items: [cartItemSchema],
+        
+        appliedCoupon: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Coupon",
+            default: null,
+        },
+        
+        discount: {
+            type: Number,
+            default: 0,
+        },
     },
     {
         timestamps: true,

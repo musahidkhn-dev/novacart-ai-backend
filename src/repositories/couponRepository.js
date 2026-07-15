@@ -28,10 +28,10 @@ export const deleteCoupon = (id) => {
     return Coupon.findByIdAndDelete(id);
 }
 
-export const findActiveCouponByCode = (code) => {
-    
-    return Coupon.findOne({
-        code: code.toUpperCase(),
-        isActive: true,
-    });
+export const findActiveCouponByCode =  (code) => {
+
+   return  Coupon.findOne({
+    code: code.toUpperCase(),
+    isActive: true,
+   });
 }

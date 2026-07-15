@@ -43,7 +43,7 @@ export const updateCartItem = asyncHandler(async(req, res) => {
 })
 
 export const removeCartItem = asyncHandler(async(req,res) => {
-    const cart = await removeCartItemService(req.user._id,req.params.itemId);
+    const cart = await removeCartItemService(req.user._id, req.params.itemId);
 
     return res.status(200).json(
         new ApiResponse(

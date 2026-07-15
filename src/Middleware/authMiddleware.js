@@ -18,7 +18,7 @@ const verifyJWT = async (req, res, next) => {
         
 
         req.user = await User.findById(decoded.id   ).select("-password -refreshToken");
-
+        
         next();
     } catch (error) {
         next(error);

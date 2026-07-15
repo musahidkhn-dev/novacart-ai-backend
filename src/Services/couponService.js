@@ -1,7 +1,7 @@
 import { COUPON_TYPE } from "../constants/couponType.js";
 import { findCartByUser, saveCart } from "../repositories/cartRepository.js";
 import { createCoupon, deleteCoupon, findActiveCouponByCode, findAllCoupons, findCouponByCode, findCouponById, saveCoupon } from "../repositories/couponRepository.js";
-import { findCouponUsage } from "../repositories/couponUsageRepository.js";
+import { countCouponUsage, findCouponUsage } from "../repositories/couponUsageRepository.js";
 import ApiError from "../utils/apiError.js";
 
 
@@ -80,7 +80,7 @@ export const applyCouponService = async(userId,data) => {
     if(!cart || cart.items.length === 0) {
         throw new ApiError(400, "Cart is empty.");
     }
-
+    
     const coupon = await findActiveCouponByCode(data.code);
 
     if(!coupon) {
@@ -97,7 +97,9 @@ export const applyCouponService = async(userId,data) => {
         throw new ApiError(400, "Coupon has expired.");
     }
 
-    if(coupon.usageLimit > 0 && coupon.usedCount >= coupon.usageLimit) {
+    const totalUsage = await countCouponUsage(coupon._id);
+
+    if(coupon.usageLimit > 0 && totalUsage >= coupon.usageLimit) {
         throw new ApiError(400, "Coupon usage limit exceeded.");
     }
 
@@ -116,7 +118,14 @@ export const applyCouponService = async(userId,data) => {
     let discount = 0;
 
     if(coupon.type === COUPON_TYPE.PERCENTAGE) {
-        discount = Math.min(discount, coupon.maximumDiscount);
+        discount = (subtotal * coupon.value) / 100;
+
+        if(coupon.maximumDiscount > 0) {
+            discount = Math.min(
+                discount,
+                subtotal
+            );
+        }
     }else{
         discount = coupon.value;
     }
@@ -127,9 +136,95 @@ export const applyCouponService = async(userId,data) => {
     await saveCart(cart);
 
     return {
+        couponCode: coupon.code,
         subtotal,
         discount,
         grandTotal: subtotal - discount,
         cart,
     };
+}
+
+export const removeCouponService = async(userId) => {
+
+    const cart = await findCartByUser(userId);
+
+    if(!cart) {
+        throw new ApiError(404, "Cart not found.");
+    }
+
+    if(!cart.appliedCoupon) {
+        throw new ApiError(400, "No coupon applied.");
+    }
+
+    cart.appliedCoupon = null;
+    cart.discount = 0;
+
+    await saveCart(cart);
+
+    return cart;
+}
+
+export const recalculateCouponService = async(cart) => {
+console.log("===== Recalculate Coupon Called =====");
+    if(!cart.appliedCoupon) {
+        return cart;
+    }
+
+    const coupon = await findCouponById(cart.appliedCoupon);
+
+    if(!coupon || !coupon.isActive) {
+        cart.appliedCoupon = null;
+        cart.discount = 0;
+
+        await saveCart(cart);
+
+        return cart;
+    }
+
+    const now = new Date();
+
+    if(coupon.startsAt > now || coupon.expiresAt < now) {
+        cart.appliedCoupon = null;
+        cart.discount = 0;
+
+        await saveCart(cart);
+
+        return cart;
+    }
+
+    const subtotal = cart.items.reduce(
+        (sum, item) => sum + item.quantity * item.priceAtAddTime,0
+    );
+console.log("Subtotal:", subtotal);
+console.log("Minimum Order:", coupon.minimumOrderAmount);
+console.log("Condition:", subtotal < coupon.minimumOrderAmount);
+    if(subtotal < coupon.minimumOrderAmount) {
+        cart.appliedCoupon = null;
+        cart.discount = 0;
+console.log("Removing coupon...");
+        await saveCart(cart);
+
+        return cart;
+    }
+
+    let discount =0;
+    if(coupon.type === COUPON_TYPE.PERCENTAGE) {
+        discount = (subtotal * coupon.value) / 100;
+
+        if(coupon.maximumDiscount > 0) {
+            discount = Math.min(
+                discount,
+                coupon.maximumDiscount
+            );
+        }
+    }else {
+        discount = Math.min(
+            coupon.value,
+            subtotal
+        );
+    }
+
+    cart.discount = discount,
+    await saveCart(cart);
+    return cart;
 }

@@ -4,8 +4,8 @@ export const createOrder = (data,session=null) => {
     return Order.create(data,{session});
 }
 
-export const findOrderById = (id) => {
-    return Order.findById(id);
+export const findOrderById = (id, session=null) => {
+    return Order.findById(id).session(session);
 }
 
 export const findOrderByUser = (userId) => {
@@ -18,6 +18,6 @@ export const findAllOrders = () => {
 
 
 export  const saveOrder = (order, session = null) => {
-    return order.save().populate("order").session(session);
+    return order.save({session})
 }
 
