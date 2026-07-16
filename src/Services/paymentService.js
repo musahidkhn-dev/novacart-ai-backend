@@ -7,6 +7,8 @@ import { PAYMENT_METHOD } from "../constants/paymentMethod.js";
 import Razorpay from "razorpay";
 import { ORDER_STATUS } from "../constants/orderStatus.js";
 import mongoose from "mongoose";
+import { createCouponUsage, findCouponUsage } from "../repositories/couponUsageRepository.js";
+import { saveCart } from "../repositories/cartRepository.js";
 
 const razorpay = new Razorpay({
     key_id: env.RAZORPAY_KEY_ID,
@@ -87,15 +89,27 @@ export const createPaymentService = async(userId, data) => {
 
 export const verifyPaymentService = async(data) => {
 
-    const payment = await findPaymentByGatewayOrderId(data.razorpay_order_id);
+   const session = await mongoose.startSession()
+   session.startTransaction();
+
+   try {
+     const payment = await findPaymentByGatewayOrderId(data.razorpay_order_id);
 
     if(!payment) {
-        throw new ApiResponse(404, "Payment not found.");
+        throw new ApiError(404, "Payment not found.");
     }
 
     if(payment.status === PAYMENT_STATUS.PAID) {
         throw new ApiError(400, "Payment already verified.");
     }
+
+    const order = payment.order;
+
+    if(!order) {
+        throw new ApiError(404, "Order not found.");
+    }
+
+
 
     const generateSignature = crypto.createHmac("sha256", env.RAZORPAY_KEY_SECRET)
                                     .update(`${data.razorpay_order_id}|${data.razorpay_payment_id}`)
@@ -105,14 +119,52 @@ export const verifyPaymentService = async(data) => {
         throw new ApiError(400, "Invalid payment signature.");
     }
 
+    // Payment Update
     payment.gatewayPaymentId = data.razorpay_payment_id;
     payment.gatewaySignature = data.razorpay_signature;
     payment.status = PAYMENT_STATUS.PAID;
+
+    // Order Update
     order.orderStatus = ORDER_STATUS.PAID;
     order.orderStatus = ORDER_STATUS.CONFIRMED
 
-    await saveOrder(order);
+    if(order.coupon) {
+        const existingUsage = await findCouponUsageByOrder(order._id);
+        
+        if(!existingUsage) {
+            await createCouponUsage({
+                coupon: order.coupon,
+                user: order.user,
+                order: order._id,
+                discountAmount: order.discount,
+            });
+        }
+    }
+
+    // Clear Cart
+    const cart = await findCartByUser(order.user);
+
+    if(cart) {
+        cart.item = [];
+        cart.discount = 0;
+        cart.appliedCoupon = null;
+
+        await saveCart(cart, session);
+    }
+
+    await savePayment(payment, session);
+    await saveOrder(order,session);
+    
+    await session.commitTransaction();
+    session.endSession();
+
     return payment;
+   } catch (error) {
+    await session.abortTransaction();
+    session.endSession();
+
+    throw error;
+   }
 };
 
 export const markCODAsPaidService = async( orderId ) => {

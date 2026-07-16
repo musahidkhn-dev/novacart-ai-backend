@@ -15,6 +15,7 @@ import reviewRoutes from "./routes/reviewRoutes.js";
 import wishlistRoutes from "./routes/wishlistRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
 import couponRoutes from "./routes/couponRoutes.js";
+import adminRoutes from "./routes/adminRoutes.js";
 
 const app = express();
 app.use(express.json());
@@ -35,7 +36,7 @@ app.use("/api/v1/reviews", reviewRoutes);
 app.use("/api/v1/wishlists", wishlistRoutes);
 app.use("/api/v1/payments", paymentRoutes);
 app.use("/api/v1/coupons", couponRoutes);
-
+app.use("/api/v1/admin", adminRoutes);
 
 
 
