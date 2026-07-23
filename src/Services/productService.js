@@ -65,8 +65,8 @@ export const createProductService = async (data, userId) => {
     });
 };
 
-export const getAllProductsService = async () => {
-    return await getAllProducts();
+export const getAllProductsService = async (query) => {
+    return await getAllProducts(query);
 };
 
 export const getProductBySlugService = async (slug) => {

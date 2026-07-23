@@ -16,8 +16,23 @@ const verifyJWT = async (req, res, next) => {
 
         const decoded = jwt.verify(token, env.JWT_SECRET);
         
+        if(!decoded?.id) {
+            throw new ApiError(401, "Invalid token.");
+        }
+        const user = await User.findById(decoded.id   ).select("-password -refreshToken");
 
-        req.user = await User.findById(decoded.id   ).select("-password -refreshToken");
+        if(!user) {
+            throw new ApiError(401, "User not found.");
+        }
+
+        if(!user.isActive) {
+            throw new ApiError(
+                403,
+                "Your account has been blocked. Please contact the administrator."
+            );
+        }
+
+        req.user = user;
         
         next();
     } catch (error) {

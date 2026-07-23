@@ -13,8 +13,9 @@ router.post("/", verifyJWT, authorizeRoles(ROLES.CUSTOMER), validate(createOrder
 router.get("/", verifyJWT, authorizeRoles(ROLES.CUSTOMER), getMyOrders);
 router.get("/:id", verifyJWT, authorizeRoles(ROLES.CUSTOMER), getMyOrder);
 router.patch("/:id/cancel", verifyJWT, authorizeRoles(ROLES.CUSTOMER), cancelOrder);
-router.get("/admin/all", verifyJWT, authorizeRoles(ROLES.ADMIN, ROLES.SUPER_ADMIN), getAllOrders);
+router.get("/admin/orders", verifyJWT, authorizeRoles(ROLES.ADMIN, ROLES.SUPER_ADMIN), getAllOrders);
 router.patch("/admin/:id/status", verifyJWT, authorizeRoles(ROLES.ADMIN, ROLES.SUPER_ADMIN), validate(updateOrderSchema), updateOrder);
+
 
 
 export default router;

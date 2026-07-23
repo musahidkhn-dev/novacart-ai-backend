@@ -40,7 +40,15 @@ export const cancelOrder = asyncHandler(async(req,res) => {
 })
 
 export const getAllOrders = asyncHandler(async(req,res) => {
-    const orders = await getAllOrdersService();
+    const result = await getAllOrdersService(req.query);
+
+    return  res.status(200).json(
+        new ApiResponse(
+            200,
+            "Orders fetched successfully.",
+            result
+        )
+    )
 
     return res.status(200).json(
         new ApiResponse(200, "Orders fetched successfully.", orders)

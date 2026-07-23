@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { findAddressById } from "../repositories/addressRepository.js";
 import { findCartByUser, saveCart } from "../repositories/cartRepository.js";
-import { createOrder, findAllOrders, findOrderById, findOrderByUser, saveOrder } from "../repositories/orderRepository.js";
+import { createOrder, findAllOrders, findAllOrdersWithFilters, findOrderById, findOrderByUser, saveOrder } from "../repositories/orderRepository.js";
 import { findVariantById, saveVariant } from "../repositories/variantRepository.js";
 import ApiError from "../utils/apiError.js";
 import { ORDER_STATUS } from "../constants/orderStatus.js";
@@ -156,6 +156,10 @@ export const getMyOrderService = async(userId,orderId) => {
     return await order;
 }
 
+export const getAllOrdersService = async (query) => {
+    return await findAllOrdersWithFilters(query);
+}
+
 export const cancelOrderService = async(userId,orderId) => {
 
     const session = await mongoose.startSession();
@@ -207,9 +211,6 @@ export const cancelOrderService = async(userId,orderId) => {
     }
 };
 
-export const getAllOrdersService = async() => {
-    return await findAllOrders();
-}
 
 export const updateOrderService = async(orderId, data) => {
 
